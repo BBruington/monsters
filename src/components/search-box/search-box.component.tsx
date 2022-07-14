@@ -1,6 +1,19 @@
 // import { Component } from 'react';
+import { ChangeEvent } from 'react';
+
 import './search-box.styles.css';
-const SearchBox = ({className, placeholder, onChangeHandler}) => (
+
+//get more used to lowercase in typescript, typescript func ex
+// const func: (a: string, b:number, c: boolean) => void = (a, b, c) => {}
+
+type SearchBoxProps = {
+  className: string;
+  placeholder?: string;
+  onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
+};
+
+
+const SearchBox = ({className, placeholder, onChangeHandler}: SearchBoxProps) => (
 
     <input 
         className={`search-box ${className}`}
@@ -8,7 +21,7 @@ const SearchBox = ({className, placeholder, onChangeHandler}) => (
         placeholder={placeholder} 
         onChange={onChangeHandler}
       />
-    )
+    );
 
 
 

@@ -1,8 +1,19 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import SearchBox from './components/search-box/search-box.component'
 import CardList from './components/card-list/card-list.component'
+
+import { getData } from './utils/fetch.utils';
 import './App.css';
+
+
+
+export type Monster = {
+  id: string;
+  name: string;
+  email: string;
+}
+
 //a functional app will rerender the entire function when needed
 //different from a class app which rerenders the render section
 const App = () => {
@@ -10,15 +21,18 @@ const App = () => {
   //the function will rerun / rerender when the value changes, not
   //the setValue
   const [searchField, setSearchField] = useState('') // [value, setValue]
-  const [monsters, setMonsters] = useState([]);
+  const [monsters, setMonsters] = useState<Monster[]>([]);
   const [filteredMonsters, setFilteredMonsters] = useState(monsters);
 
-  console.log('rendered');
-
+  
   useEffect(() => {
-    fetch('http://jsonplaceholder.typicode.com/users')
-    .then((response) => response.json())
-    .then((users) => setMonsters(users));
+
+    const fetchUsers = async () => { //we will be getting a monster array aka Monster[]
+      const users = await getData<Monster[]>('http://jsonplaceholder.typicode.com/users')
+      setMonsters(users);
+    };
+
+    fetchUsers();
 
   }, []);
 //useEffect: whenever the content in the listed array changes,
@@ -35,7 +49,7 @@ useEffect(() => {
 //remember run useEffect only when monsters or search field in
 //array changes
   
-  const onSearchChange = (event) => {
+  const onSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     //if i setSearchField to searchField instead of string,
     //when i run the function it'll only be set to the CURRENT
     //searchfield and not when the searchfield input changes value
